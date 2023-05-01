@@ -7,6 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
+  ScrollView
 } from "react-native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -48,9 +49,19 @@ const HomeScreen = () => {
     }
   };
 
+  // Get the local time for United Arab Emirates (Dubai)
+  const localTimeDubai = new Date().toLocaleString("en-US", {
+    timeZone: "Asia/Dubai",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <Text style={styles.title}>Weather App</Text>
+      <Text style={styles.locationText}>
+        Your Location: United Arab Emirates, {localTimeDubai}
+      </Text>
       {countries.map((country) => (
         <View key={country.code} style={{ marginBottom: 10 }}>
           <TouchableOpacity
@@ -87,15 +98,27 @@ const HomeScreen = () => {
               </Text>
 
               <Text style={styles.detailsText}>
-                Wether: {weatherData.current.condition.text}
+                Weather: {weatherData.current.condition.text}
+              </Text>
+
+              <Text style={styles.detailsText}>
+                Time: {weatherData.location.localtime.split(" ")[1]}
               </Text>
             </View>
           )}
         </View>
       ))}
+      <View style={styles.footer}>
+        <Text style={styles.footerText}>For support call 0555737829</Text>
+        <Text style={styles.footerText}>© {new Date().getFullYear()}</Text>
     </View>
+    
+    </ScrollView>
+    
+  
   );
 };
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -108,6 +131,11 @@ const styles = StyleSheet.create({
     textAlign: "center",
     marginVertical: 20,
     color: "#fff",
+  },
+  locationText: {
+    fontSize: 18,
+    color: "#fff",
+    marginBottom: 20,
   },
   countryContainer: {
     flexDirection: "row",
@@ -149,11 +177,16 @@ const styles = StyleSheet.create({
     color: "#fff",
     marginTop: 5,
   },
-  dayBackground: {
-    backgroundColor: "#4D4DFF",
+  footer: {
+    backgroundColor: '#1C1C2E',
+    padding: 10,
+    alignItems: 'center',
+    borderTopWidth: 1,
+    borderTopColor: '#fff',
   },
-  nightBackground: {
-    backgroundColor: "#1D1D3E",
+  footerText: {
+    color: '#fff',
+    fontSize: 16,
   },
 });
 
