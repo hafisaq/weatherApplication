@@ -7,7 +7,7 @@ import {
   ImageBackground,
   TouchableOpacity,
   Image,
-  ScrollView
+  ScrollView,
 } from "react-native";
 import axios from "axios";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -40,12 +40,15 @@ const HomeScreen = () => {
     const time = new Date().toLocaleString("en-US", {
       timeZone: timeZone,
       hour: "numeric",
+      hour12: true,
     });
     const hour = Number(time.split(" ")[0]);
-    if (hour >= 6 && hour <= 18) {
-      return <Icon name="moon-o" size={20} color="white" />;
-    } else {
+    const period = time.split(" ")[1];
+
+    if ((hour >= 6 && period === "AM") || (hour <= 6 && period === "PM")) {
       return <Icon name="sun-o" size={20} color="orange" />;
+    } else {
+      return <Icon name="moon-o" size={20} color="white" />;
     }
   };
 
@@ -104,6 +107,11 @@ const HomeScreen = () => {
               <Text style={styles.detailsText}>
                 Time: {weatherData.location.localtime.split(" ")[1]}
               </Text>
+
+              <Image
+                source={{ uri: weatherData.current.condition.icon }}
+                style={{ width: 50, height: 50 }}
+              />
             </View>
           )}
         </View>
@@ -111,11 +119,8 @@ const HomeScreen = () => {
       <View style={styles.footer}>
         <Text style={styles.footerText}>For support call 0555737829</Text>
         <Text style={styles.footerText}>© {new Date().getFullYear()}</Text>
-    </View>
-    
+      </View>
     </ScrollView>
-    
-  
   );
 };
 
@@ -178,14 +183,14 @@ const styles = StyleSheet.create({
     marginTop: 5,
   },
   footer: {
-    backgroundColor: '#1C1C2E',
+    backgroundColor: "#1C1C2E",
     padding: 10,
-    alignItems: 'center',
+    alignItems: "center",
     borderTopWidth: 1,
-    borderTopColor: '#fff',
+    borderTopColor: "#fff",
   },
   footerText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
   },
 });
